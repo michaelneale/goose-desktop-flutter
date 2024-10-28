@@ -117,7 +117,9 @@ class StatusPanel extends StatelessWidget {
                 ],
               ),
             ),
-            if (panel.type == PanelType.confirmation) ...[
+            if (panel.type == PanelType.confirmation || 
+                panel.type == PanelType.pullRequest ||
+                panel.type == PanelType.installation) ...[
               const SizedBox(width: 16),
               Row(
                 mainAxisSize: MainAxisSize.min,
@@ -126,7 +128,8 @@ class StatusPanel extends StatelessWidget {
                     onPressed: () {
                       // TODO: Handle confirmation
                     },
-                    child: const Text('Confirm'),
+                    child: Text(panel.type == PanelType.pullRequest ? 'Create PR' : 
+                              panel.type == PanelType.installation ? 'Install' : 'Confirm'),
                   ),
                   const SizedBox(width: 8),
                   TextButton(
@@ -136,6 +139,16 @@ class StatusPanel extends StatelessWidget {
                     child: const Text('Cancel'),
                   ),
                 ],
+              ),
+            ],
+            if (panel.type == PanelType.editingCode && panel.details?.contains('files:') == true) ...[
+              const SizedBox(width: 16),
+              ElevatedButton.icon(
+                onPressed: () {
+                  // TODO: Implement open in editor functionality
+                },
+                icon: const Icon(Icons.edit_document),
+                label: const Text('Open in Editor'),
               ),
             ],
           ],
@@ -149,8 +162,12 @@ class StatusPanel extends StatelessWidget {
       case PanelType.editingCode:
         return colorScheme.primaryContainer.withOpacity(0.2);
       case PanelType.confirmation:
+      case PanelType.pullRequest:
+      case PanelType.installation:
         return colorScheme.secondaryContainer.withOpacity(0.2);
       case PanelType.thinking:
+      case PanelType.looking:
+      case PanelType.browsing:
         return colorScheme.surfaceVariant.withOpacity(0.2);
       default:
         return colorScheme.surface;

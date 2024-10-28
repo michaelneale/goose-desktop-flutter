@@ -3,6 +3,10 @@ enum PanelType {
   editingCode,
   confirmation,
   thinking,
+  looking,
+  browsing,
+  pullRequest,
+  installation,
 }
 
 class PanelItem {
@@ -22,7 +26,34 @@ class PanelState {
 
   const PanelState({
     List<PanelItem>? panels,
-  }) : panels = panels ?? const [];
+  }) : panels = panels ?? const [
+    // Default panels if none provided
+    PanelItem(
+      type: PanelType.looking,
+      message: 'Looking at screen',
+      details: 'Analyzing current application state and UI components',
+    ),
+    PanelItem(
+      type: PanelType.browsing,
+      message: 'Browsing company knowledge base',
+      details: 'Searching for relevant documentation and best practices',
+    ),
+    PanelItem(
+      type: PanelType.editingCode,
+      message: 'Preparing to update authentication module',
+      details: 'Found relevant files: auth_service.dart, user_model.dart',
+    ),
+    PanelItem(
+      type: PanelType.pullRequest,
+      message: 'Ready to open pull request',
+      details: 'Changes prepared for review. Would you like to create the PR?',
+    ),
+    PanelItem(
+      type: PanelType.installation,
+      message: 'Package installation required',
+      details: 'New dependencies needed. Would you like to proceed with installation?',
+    ),
+  ];
 
   PanelState copyWith({
     List<PanelItem>? panels,

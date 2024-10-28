@@ -61,7 +61,7 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController _textController = TextEditingController();
-  PanelState _panelState = const PanelState();
+  PanelState _panelState = PanelState();
 
   @override
   void dispose() {
