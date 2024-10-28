@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'models/panel_state.dart';
+import 'widgets/status_panels.dart';
 
 void main() {
   runApp(const GooseDesktopApp());
@@ -59,6 +61,7 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController _textController = TextEditingController();
+  PanelState _panelState = const PanelState();
 
   @override
   void dispose() {
@@ -131,6 +134,9 @@ class _ChatScreenState extends State<ChatScreen> {
               ],
             ),
           ),
+
+          // Status panel area
+          StatusPanel(state: _panelState),
 
           // Chat display area
           Expanded(
