@@ -69,6 +69,24 @@ class _ChatScreenState extends State<ChatScreen> {
     super.dispose();
   }
 
+  void _handleSendMessage() {
+    if (_textController.text.isNotEmpty) {
+      setState(() {
+        _panelState = _panelState.addPanel(
+          type: PanelType.thinking,
+          message: _textController.text,
+        );
+      });
+      _textController.clear();
+    }
+  }
+
+  void _handlePanelDismiss(int index) {
+    setState(() {
+      _panelState = _panelState.removePanel(index);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -108,16 +126,12 @@ class _ChatScreenState extends State<ChatScreen> {
                     style: const TextStyle(fontSize: 16),
                     maxLines: 3,
                     minLines: 1,
+                    onSubmitted: (_) => _handleSendMessage(),
                   ),
                 ),
                 const SizedBox(width: 16),
                 ElevatedButton(
-                  onPressed: () {
-                    if (_textController.text.isNotEmpty) {
-                      print('Message: ${_textController.text}');
-                      _textController.clear();
-                    }
-                  },
+                  onPressed: _handleSendMessage,
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -135,50 +149,10 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
           ),
 
-          // Status panel area
-          StatusPanel(state: _panelState),
-
-          // Chat display area
-          Expanded(
-            child: Container(
-              margin: const EdgeInsets.all(24.0),
-              padding: const EdgeInsets.all(24.0),
-              decoration: BoxDecoration(
-                color: colorScheme.surface,
-                borderRadius: BorderRadius.circular(24),
-                border: Border.all(
-                  color: colorScheme.outline.withOpacity(0.5),
-                  width: 1,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
-                    blurRadius: 16,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.chat_bubble_outline_rounded,
-                      size: 48,
-                      color: colorScheme.primary.withOpacity(0.5),
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      'Your chat history will appear here',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: colorScheme.onSurface.withOpacity(0.7),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+          // Panel display area (replaces chat history)
+          StatusPanel(
+            state: _panelState,
+            onPanelDismiss: _handlePanelDismiss,
           ),
         ],
       ),
